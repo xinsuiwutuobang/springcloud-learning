@@ -7,9 +7,14 @@ spring:
     user:
       name: macro
       password: 123456
+  profiles:
+    active: dev
 eureka:
+  environment: dev
+  datacenter: Eureka Server
   instance:
     hostname: localhost
+
   client:
     fetch-registry: false
     register-with-eureka: false
