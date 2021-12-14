@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 /**
  * Created by macro on 2019/8/29.
  */
@@ -52,5 +54,23 @@ public class UserRibbonController {
     @PostMapping("/delete/{id}")
     public CommonResult delete(@PathVariable Long id) {
         return restTemplate.postForObject(userServiceUrl + "/user/delete/{1}", null, CommonResult.class, id);
+    }
+
+    /*
+    * http://localhost:8301/user/getUserByIds?ids=1&ids=2&ids=3
+    * http://localhost:8301/user/getUserByIds?ids=1,2,3
+    * */
+    @GetMapping("/getUserByIds")
+    public CommonResult getUserByIds(@RequestParam List<Long> ids) {
+        userServiceUrl += "/user/getUserByIds";
+        for (int i = 0; i < ids.size(); i++) {
+            Long id = ids.get(i);
+            if (i == 0) {
+                userServiceUrl += "?ids=" + id;
+            } else {
+                userServiceUrl += "&ids=" + id;
+            }
+        }
+        return restTemplate.getForObject(userServiceUrl, CommonResult.class,ids);
     }
 }
